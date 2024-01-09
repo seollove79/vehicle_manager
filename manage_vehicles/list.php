@@ -24,6 +24,12 @@ if (isset($_GET["searchString"])) {
     $searchString = "";
 };
 
+if (isset($_GET["sel_model"])) {
+    $selModel = $_GET["sel_model"];
+} else{
+    $selModel = "";
+};
+
 // 데이터를 추출할 시작 지점 계산
 $start_from = ($page - 1) * $records_per_page;
 
@@ -32,11 +38,16 @@ try {
     // LIMIT 쿼리를 사용하여 필요한 만큼의 레코드만 선택
     // 검색어가 있을 경우
 
-    if ($searchString != "") {
-        $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.del_check=0 and A.$column like '%$searchString%' ORDER BY A.num DESC LIMIT :start_from, :records_per_page";
-    } else {
-        $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.del_check=0 ORDER BY A.num DESC LIMIT :start_from, :records_per_page";
+
+    $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.del_check=0 ";
+    if ($selModel != "") {
+        $sqlStr = $sqlStr . " and A.models_num = $selModel ";
     }
+    if ($searchString != "") {
+        $sqlStr = $sqlStr . " and A.$column like '%$searchString%' ";
+    }
+    $sqlStr = $sqlStr . " ORDER BY A.num DESC LIMIT :start_from, :records_per_page";
+
     $stmt = $conn->prepare($sqlStr);
     $stmt->bindParam(':start_from', $start_from, PDO::PARAM_INT);
     $stmt->bindParam(':records_per_page', $records_per_page, PDO::PARAM_INT);
@@ -73,14 +84,17 @@ try {
                     </div>
 <!--검색폼-->
                     <div class="row mt-3 mb-3">
-                        <div class="col-6"></div>
+                        <div class="col-6 text-start"><button class="btn btn-primary" onclick="document.location.href='download_excel.php?column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">엑셀저장</button></div>
                         <div class="col-6 text-end">
                             <form class="d-flex" action="list.php" method="get" onsubmit="return checkSearchForm()" name="searchForm">
+                            <input type="hidden" name="sel_model" value="<?=$selModel?>">
                                 <select class="form-select" aria-label="Default select example" name="column">
-                                    <option value="registration_num">신고번호</option>
-                                    <option value="vehicle_serial_num">기체 일련번호</option>
-                                    <option value="fc_serial_num1">FC 일련번호</option>
-                                    <option value="fc_serial_num2">FC 시리얼</option>
+                                    <option value="" <?php if($searchString=="") {?>selected<?php }?>>검색항목</option>
+                                    <option value="">=======</option>
+                                    <option value="registration_num" <?php if($column=='registration_num') {?>selected<?php }?>>신고번호</option>
+                                    <option value="vehicle_serial_num" <?php if($column=='vehicle_serial_num') {?>selected<?php }?>>기체 일련번호</option>
+                                    <option value="fc_serial_num1" <?php if($column=='fc_serial_num1') {?>selected<?php }?>>FC 일련번호</option>
+                                    <option value="fc_serial_num2" <?php if($column=='fc_serial_num2') {?>selected<?php }?>>FC 시리얼</option>
                                 </select>
                                 <input class="form-control me-2" type="search" placeholder="검색어" name="searchString" value="<?=$searchString?>">
                                 <button class="btn btn-outline-success" type="submit">search</button>
@@ -94,7 +108,30 @@ try {
                                 <thead>
                                     <tr>
                                         <th scope="col">순번</th>
-                                        <th scope="col">모델명</th>
+                                        <th scope="col">
+                                        <form name="modelForm" method="get" action="list.php" onsubmit="return checkModelForm()">
+                                        <input type="hidden" name="column" value="<?=$column?>">
+                                        <input type="hidden" name="searchString" value="<?=$searchString?>">
+                                            <select class="form-select" name="sel_model" onchange="document.modelForm.submit()">
+                                                <option value="" <?php if($selModel=="") {?>selected<?php } ?>>모델명</option>
+                                                <option value="">======</option>
+<?php
+// 모델 목록 가겨오기
+$sqlModelStr = "SELECT * FROM models where del_check=0 ORDER BY model_name ASC";
+$stmtModel = $conn->prepare($sqlModelStr);
+$stmtModel->execute();
+
+while ($rowModel = $stmtModel->fetch(PDO::FETCH_ASSOC)) {
+    $modelNum = $rowModel['num'];
+    $modelName = $rowModel['model_name'];
+?>
+                                                <option value="<?=$modelNum?>" <?php if($selModel==$modelNum) { ?>selected<?php } ?>><?=$modelName?></option>
+<?php
+}
+?>
+                                            </select>
+                                        </form>
+                                        </th>
                                         <th scope="col">신고번호</th>
                                         <th scope="col">기체 일련번호</th>
                                         <th scope="col">제작일</th>
@@ -195,6 +232,15 @@ $conn = null;
         if (document.searchForm.searchString.value == "") {
             alert("검색어를 입력하세요.");
             document.searchForm.searchString.focus();
+            return false;
+        }
+        return true;
+    }
+
+    function checkModelForm() {
+        if (document.modelForm.sel_model.value == "") {
+            alert("모델을 선택하세요.");
+            document.modelForm.sel_model.focus();
             return false;
         }
         return true;
