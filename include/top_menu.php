@@ -14,9 +14,17 @@
                                 <a class="nav-link active" aria-current="page"
                                     href="/manage_vehicles/list.php">기체정보관리</a>
                             </li>
+<?php
+if (isset($_SESSION["mem_name"])) {
+    if ($_SESSION["mem_level"] == 100 || $_SESSION["mem_level"] == 999) {
+?>
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin/list_member.php">관리자메뉴</a>
                             </li>
+<?php
+    }
+}
+?>
                         </ul>
                     </div>
                 </div>

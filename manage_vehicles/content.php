@@ -105,12 +105,12 @@ try {
                                         <td><?=$modelName?></td>
                                         <td><input class="form-control" type="text" style="width:100%;height:100%;"
                                                 placeholder="신고번호" name="registration_num" value="<?=$registrationNum?>"
-                                                readonly></td>
+                                                <?php if (!($_SESSION["mem_level"]==999 || $_SESSION["mem_level"]==100)) {echo 'readonly';}?>></td>
                                         <td><input class="form-control" type="text" style="width:100%;height:100%;"
                                                 placeholder="기체 일련번호" name="vehicle_serial_num"
-                                                value="<?=$vehicleSerialNum?>" readOnly></td>
+                                                value="<?=$vehicleSerialNum?>" <?php if (!($_SESSION["mem_level"]==999 || $_SESSION["mem_level"]==100)) {echo 'readonly';}?>></td>
                                         <td><input class="form-control" type="date" name="make_date"
-                                                value="<?=$makeDate?>" readonly></td>
+                                                value="<?=$makeDate?>" <?php if (!($_SESSION["mem_level"]==999 || $_SESSION["mem_level"]==100)) {echo 'readonly';}?>></td>
                                     </tr>
                                 </table>
                                 <div style="text-align:left;margin:20px 0 5px 0;">2. 장착 장비 정보</div>
@@ -404,6 +404,24 @@ try {
     <script>
     //form submit시 체크
     function checkForm() {
+        if (document.myform.registration_num.value == "") {
+            alert("신고번호를 입력해주세요.");
+            document.myform.registration_num.focus();
+            return false;
+        }
+
+        if (document.myform.vehicle_serial_num.value == "") {
+            alert("기체 일련번호를 입력해주세요.");
+            document.myform.vehicle_serial_num.focus();
+            return false;
+        }
+
+        if (document.myform.make_date.value == "") {
+            alert("제작일을 입력해주세요.");
+            document.myform.make_date.focus();
+            return false;
+        }
+
         if (document.myform.fc_serial_num1.value == "") {
             alert("FC 일련번호를 입력해주세요.");
             document.myform.fc_serial_num1.focus();

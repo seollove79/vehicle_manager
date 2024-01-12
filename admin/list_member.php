@@ -1,6 +1,6 @@
 <?php include_once("../include/page_start.php"); ?>
 <?php include_once("../include/dbcon.php"); ?>
-<?php include_once("../include/session.php"); ?>
+<?php include_once("../include/session_admin.php"); ?>
 <?php
 // 페이징 설정
 $records_per_page = 30; // 페이지당 레코드 수

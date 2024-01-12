@@ -1,6 +1,7 @@
 <?php 
 include_once("../include/page_start.php"); 
 include_once("../include/dbcon.php"); 
+include_once("../include/session.php"); 
 
 // POST 데이터 처리
 $registrationNum = isset($_POST["registration_num"]) ? $_POST["registration_num"] : exit("<script>alert('신고번호를 입력해주세요.');history.back();</script>");

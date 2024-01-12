@@ -1,6 +1,6 @@
 <?php include_once("../include/page_start.php"); ?>
 <?php include_once("../include/dbcon.php"); ?>
-<?php include_once("../include/session.php"); ?>
+<?php include_once("../include/session_admin.php"); ?>
 
 <?php
 if (!isset($_POST['num'])) {
