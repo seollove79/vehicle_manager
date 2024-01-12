@@ -48,6 +48,18 @@ $sheet->setCellValue('P1', '카메라');
 $sheet->setCellValue('Q1', '전방 레이더');
 $sheet->setCellValue('R1', '후방 레이더');
 $sheet->setCellValue('S1', '하방 레이더');
+$sheet->setCellValue('T1', '비고(모터)');
+$sheet->setCellValue('U1', '판매처');
+$sheet->setCellValue('V1', '출고일');
+$sheet->setCellValue('W1', '소유자');
+$sheet->setCellValue('X1', '소유자 연락처');
+$sheet->setCellValue('Y1', '비고(옵션)');
+$sheet->setCellValue('Z1', '형상변경이력');
+$sheet->setCellValue('AA1', '초도인증검사');
+$sheet->setCellValue('AB1', '1차 정기인증검사');
+$sheet->setCellValue('AC1', '2차 정기인증검사');
+$sheet->setCellValue('AD1', '3차 정기인증검사');
+
 
 $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.del_check=0 ";
 
@@ -82,7 +94,18 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $frontRadar = $row['front_radar'];
     $rearRadar = $row['rear_radar'];
     $downwardRadar = $row['downward_radar'];
+    $etcMotor = $row['etc_motor'];
     $makeDate = $row['make_date'];
+    $customerCo = $row['customer_co'];
+    $customerDate = $row['customer_date'];
+    $customerOwner = $row['customer_owner'];
+    $customerTel = $row['customer_tel'];
+    $customerOption = $row['customer_option'];
+    $shapeChangeHistory = $row['shape_change_history'];
+    $certificationInitialDate = $row['certification_initial_date'];
+    $certification1Date = $row['certification_1_date'];
+    $certification2Date = $row['certification_2_date'];
+    $certification3Date = $row['certification_3_date'];
 
     $sheet->setCellValue('A'.$i, $num);
     $sheet->setCellValue('B'.$i, $modelName);
@@ -103,6 +126,17 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $sheet->setCellValue('Q'.$i, $frontRadar);
     $sheet->setCellValue('R'.$i, $rearRadar);
     $sheet->setCellValue('S'.$i, $downwardRadar);
+    $sheet->setCellValue('T'.$i, $etcMotor);
+    $sheet->setCellValue('U'.$i, $customerCo);
+    $sheet->setCellValue('V'.$i, $customerDate);
+    $sheet->setCellValue('W'.$i, $customerOwner);
+    $sheet->setCellValue('X'.$i, $customerTel);
+    $sheet->setCellValue('Y'.$i, $customerOption);
+    $sheet->setCellValue('Z'.$i, $shapeChangeHistory);
+    $sheet->setCellValue('AA'.$i, $certificationInitialDate);
+    $sheet->setCellValue('AB'.$i, $certification1Date);
+    $sheet->setCellValue('AC'.$i, $certification2Date);
+    $sheet->setCellValue('AD'.$i, $certification3Date);
     $i++;
 }
 

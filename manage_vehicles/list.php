@@ -84,7 +84,9 @@ try {
                     </div>
 <!--검색폼-->
                     <div class="row mt-3 mb-3">
-                        <div class="col-6 text-start"><button class="btn btn-primary" onclick="document.location.href='download_excel.php?column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">엑셀저장</button></div>
+                        <div class="col-6 text-start"><button class="btn btn-primary" onclick="document.location.href='download_excel.php?column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">엑셀 다운로드</button>
+                        <button class="btn btn-primary" onclick="openWriteExcel()" style="margin-left:10px;">엑셀 업로드</button>
+                    </div>
                         <div class="col-6 text-end">
                             <form class="d-flex" action="list.php" method="get" onsubmit="return checkSearchForm()" name="searchForm">
                             <input type="hidden" name="sel_model" value="<?=$selModel?>">
@@ -259,6 +261,11 @@ $conn = null;
             return false;
         }
         return true;
+    }
+
+    function openWriteExcel() {
+        event.preventDefault();
+        window.open("write_excel.php", "write_excel", "width=800, height=250, left=100, top=50");
     }
     </script>
 </body>
