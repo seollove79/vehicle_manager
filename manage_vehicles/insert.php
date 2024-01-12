@@ -8,8 +8,10 @@ $registrationNum = isset($_POST["registration_num"]) ? $_POST["registration_num"
 $vehicleSerialNum = isset($_POST["vehicle_serial_num"]) ? $_POST["vehicle_serial_num"] : exit("<script>alert('기체 일련번호를 입력해주세요.');history.back();</script>");
 $makeDate = isset($_POST["make_date"]) ? $_POST["make_date"] : exit("<script>alert('제작일을 입력해주세요.');history.back();</script>");
 $fcSerialNum1 = isset($_POST["fc_serial_num1"]) ? $_POST["fc_serial_num1"] : exit("<script>alert('FC 시리얼을 입력해주세요.');history.back();</script>");
-$fcSerialNum2 = isset($_POST["fc_serial_num2"]) ? $_POST["fc_serial_num2"] : exit("<script>alert('FC 시리얼을 입력해주세요.');history.back();</script>");
-$pmu = isset($_POST["pmu"]) ? $_POST["pmu"] : exit("<script>alert('PMU를 입력해주세요.');history.back();</script>");
+
+
+$fcSerialNum2 = $_POST["fc_serial_num2"] ?: "N/A";
+$pmu = $_POST["pmu"] ?: "N/A";
 
 $customerDate = $_POST["customer_date"] ?: null;
 $certificationInitialDate = $_POST["certification_initial_date"] ?: null;
@@ -17,25 +19,25 @@ $certification1Date = $_POST["certification_1_date"] ?: null;
 $certification2Date = $_POST["certification_2_date"] ?: null;
 $certification3Date = $_POST["certification_3_date"] ?: null;
 
-$gp1 = $_POST["gps1"];
-$gp2 = $_POST["gps2"];
-$rtkModule = $_POST["rtk_module"];
-$rtk1 = $_POST["rtk1"];
-$rtk2 = $_POST["rtk2"];
-$transmitter = $_POST["transmitter"];
-$receiver = $_POST["receiver"];
-$camera = $_POST["camera"];
-$frontRadar = $_POST["front_radar"];
-$rearRadar = $_POST["rear_radar"];
-$downwardRadar = $_POST["downward_radar"];
+$gp1 = $_POST["gps1"] ?: "N/A";
+$gp2 = $_POST["gps2"] ?: "N/A";
+$rtkModule = $_POST["rtk_module"] ?: "N/A";
+$rtk1 = $_POST["rtk1"] ?: "N/A";
+$rtk2 = $_POST["rtk2"] ?: "N/A";
+$transmitter = $_POST["transmitter"] ?: "N/A";
+$receiver = $_POST["receiver"] ?: "N/A";
+$camera = $_POST["camera"] ?: "N/A";
+$frontRadar = $_POST["front_radar"] ?: "N/A";
+$rearRadar = $_POST["rear_radar"] ?: "N/A";
+$downwardRadar = $_POST["downward_radar"] ?: "N/A";
 
-$customerCo = $_POST["customer_co"];
-$custumerOwner = $_POST["customer_owner"];
-$customerTel = $_POST["customer_tel"];
-$customerOption = $_POST["customer_option"];
+$customerCo = $_POST["customer_co"] ?: "N/A";
+$custumerOwner = $_POST["customer_owner"] ?: "N/A";
+$customerTel = $_POST["customer_tel"] ?: "N/A";
+$customerOption = $_POST["customer_option"] ?: "N/A";
 
-$shapeChangeHistory = $_POST["shape_change_history"];
-$etcMotor = $_POST["etc_motor"];
+$shapeChangeHistory = $_POST["shape_change_history"] ?: "N/A";
+$etcMotor = $_POST["etc_motor"] ?: "N/A";
 
 // vehicles 테이블에 데이터 삽입
 $sqlStr = "INSERT INTO vehicles (

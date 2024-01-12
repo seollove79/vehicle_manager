@@ -74,7 +74,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 <table class="write-table">
                                     <tr>
                                         <td width="25%" style="background-color:#e2e2e2">*FC 일련번호</td>
-                                        <td width="50%" colspan="2" style="background-color:#e2e2e2">*FC 시리얼</td>
+                                        <td width="50%" colspan="2" style="background-color:#e2e2e2">FC 시리얼</td>
                                         <td width="25%" style="background-color:#e2e2e2">비고(모터)</td>
                                     </tr>
                                     <tr>
@@ -83,7 +83,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                         <td width="25%" rowspan="9"><textarea class="form-control" style="width:100%;height:320px" placeholder="비고(모터)" name="etc_motor"></textarea></td>
                                     </tr>
                                     <tr>
-                                        <td width="25%" style="background-color:#e2e2e2">*PMU</td>
+                                        <td width="25%" style="background-color:#e2e2e2">PMU</td>
                                         <td width="25%" style="background-color:#e2e2e2">GPS_1</td>
                                         <td width="25%" style="background-color:#e2e2e2">GPS_2</td>
                                     </tr>
@@ -215,17 +215,6 @@ function checkForm() {
         document.myform.fc_serial_num1.focus();
         return false;
     }
-    if (document.myform.fc_serial_num2.value == "") {
-        alert("FC 시리얼을 입력해주세요.");
-        document.myform.fc_serial_num2.focus();
-        return false;
-    }
-    if (document.myform.pmu.value == "") {
-        alert("PMU를 입력해주세요.");
-        document.myform.pmu.focus();
-        return false;
-    }
-
     return true;
 }
     </script>

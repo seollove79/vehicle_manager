@@ -1,8 +1,17 @@
 <?php include_once("../include/page_start.php"); ?>
 <?php include_once("../include/dbcon.php"); ?>
 <?php
+if (isset($_SESSION["mem_name"])) {
+    echo '<script>';
+    echo 'window.history.back();';
+    echo '</script>';
+}
+
 if(isset($_SERVER['HTTP_REFERER'])) {
     $previousPage = $_SERVER['HTTP_REFERER'];
+    if (strpos($previousPage, "logout.php") !== false) {
+        $previousPage = "/";
+    }
 } else {
     $previousPage = "/";
 }

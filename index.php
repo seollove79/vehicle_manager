@@ -1,5 +1,12 @@
 <?php include_once("./include/page_start.php"); ?>
 <?php include_once("./include/dbcon.php"); ?>
+<?php
+if (!isset($_SESSION["mem_name"])) {
+    header("Location: ./member/login.php");
+} else {
+    header("Location: ./manage_vehicles/list.php");
+}
+?>
 <!doctype html>
 <html lang="ko">
 <head>

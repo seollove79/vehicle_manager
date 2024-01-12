@@ -5,7 +5,7 @@
 $asHistoryNum = $_GET['asHistoryNum'];
 
 // as_history 테이블에서 데이터 추출
-$sqlStr = "SELECT * FROM as_history WHERE num = :as_history_num";
+$sqlStr = "SELECT A.*, B.mem_name FROM as_history A inner join member B on A.mem_num = B.num WHERE A.num = :as_history_num";
 
 $stmt = $conn->prepare($sqlStr);
 $stmt->bindParam(':as_history_num', $asHistoryNum, PDO::PARAM_INT);
@@ -13,10 +13,8 @@ $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $writeDate = $row['write_date'];
 $memNum = $row['mem_num'];
+$memName = $row['mem_name'];
 
-if($memNum != $_SESSION["mem_num"]) {
-    echo "<script>alert('권한이 없습니다.');self.close();</script>";
-}
 $inputDate = $row['input_date'];
 $workingTime = $row['working_time'];
 $outputDate = $row['output_date'];
@@ -69,7 +67,7 @@ $etcContent = $row['etc_content'];
                         </tr>
                         <tr>
                             <td><input class="form-control" type="date" name="write_date" value="<?=$writeDate?>"></td>
-                            <td style="text-align:center;"><?=$_SESSION["mem_name"]?></td>
+                            <td style="text-align:center;"><?=$memName?></td>
                         </tr>
                     </table>
                     <div style="text-align:left;margin:20px 0 5px 0;">1. 처리정보</div>
@@ -145,7 +143,7 @@ while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         </tr>
                     </table>
                     <div style="text-align:center;margin:20px 0 50px 0;">
-                        <input type="submit" class="btn btn-primary" value="수정사항 적용"><button class="btn btn-primary" style="margin-left:20px" onclick="self.close()">취소</button>
+                        <input type="submit" class="btn btn-primary" value="수정사항 적용"><button class="btn btn-primary" style="margin-left:20px" onclick="delCheck(<?=$asHistoryNum?>)">삭제</button><button class="btn btn-primary" style="margin-left:20px" onclick="self.close()">취소</button>
                     </div>
                 </form>
             </div>
@@ -172,6 +170,13 @@ while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             return false;
         }
         return true;
+    }
+
+    function delCheck(asHistoryNum) {
+        event.preventDefault();
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            location.href = "del_as_history_ok.php?num=" + asHistoryNum;
+        }
     }
     </script>
 </body>

@@ -117,7 +117,7 @@ try {
                                 <table class="write-table">
                                     <tr>
                                         <td width="25%" style="background-color:#e2e2e2">*FC 일련번호</td>
-                                        <td width="50%" colspan="2" style="background-color:#e2e2e2">*FC 시리얼</td>
+                                        <td width="50%" colspan="2" style="background-color:#e2e2e2">FC 시리얼</td>
                                         <td width="25%" style="background-color:#e2e2e2">비고(모터)</td>
                                     </tr>
                                     <tr>
@@ -132,7 +132,7 @@ try {
                                                 name="etc_motor"><?=$etcMotor?></textarea></td>
                                     </tr>
                                     <tr>
-                                        <td width="25%" style="background-color:#e2e2e2">*PMU</td>
+                                        <td width="25%" style="background-color:#e2e2e2">PMU</td>
                                         <td width="25%" style="background-color:#e2e2e2">GPS_1</td>
                                         <td width="25%" style="background-color:#e2e2e2">GPS_2</td>
                                     </tr>
@@ -330,7 +330,7 @@ try {
                                         <td style="background-color:#e2e2e2">작성자</td>
                                     </tr>
 <?php
-    $sqlStr = "SELECT A.num, A.write_date, B.mem_name FROM as_history A inner join member B on A.mem_num=B.num where vehicles_num=:vehicles_num order by A.num desc";
+    $sqlStr = "SELECT A.num, A.write_date, B.mem_name FROM as_history A inner join member B on A.mem_num=B.num where vehicles_num=:vehicles_num and A.del_check=0 order by A.num desc";
     $stmt = $conn->prepare($sqlStr);
     $stmt->bindParam(':vehicles_num', $num, PDO::PARAM_INT);
     $stmt->execute();
@@ -350,11 +350,11 @@ try {
                                 <div style="text-align:left;margin:20px 0 5px 0;">7. 변경이력</div>
                                 <table class="write-table">
                                     <tr>
-                                        <td style="background-color:#e2e2e2">변경일</td>
-                                        <td style="background-color:#e2e2e2">변경 항목</td>
-                                        <td style="background-color:#e2e2e2">변경 전</td>
-                                        <td style="background-color:#e2e2e2">변경 후</td>
-                                        <td style="background-color:#e2e2e2">작성자</td>
+                                        <td width="10%" style="background-color:#e2e2e2">변경일</td>
+                                        <td width="16%" style="background-color:#e2e2e2">변경 항목</td>
+                                        <td width="33%" style="background-color:#e2e2e2">변경 전</td>
+                                        <td width="33%" style="background-color:#e2e2e2">변경 후</td>
+                                        <td width="8%" style="background-color:#e2e2e2">작성자</td>
                                     </tr>
 <?php
     $sqlStr = "SELECT A.*, B.mem_name FROM change_history A inner join member B on A.mem_num=B.num where vehicles_num=:vehicles_num order by A.num desc";
@@ -382,6 +382,7 @@ try {
                                 </table>
                                 <div style="text-align:center;margin:20px 0 50px 0;">
                                     <input type="submit" class="btn btn-primary" value="수정사항 적용">
+                                    <button class="btn btn-primary" style="margin-left:20px" onclick="delCheck(<?=$num?>)">삭제</button>
                                     <button class="btn btn-primary" style="margin-left:20px" onclick="event.preventDefault();history.back()">취소</button>
                                 </div>
                             </form>
@@ -408,16 +409,6 @@ try {
             document.myform.fc_serial_num1.focus();
             return false;
         }
-        if (document.myform.fc_serial_num2.value == "") {
-            alert("FC 시리얼을 입력해주세요.");
-            document.myform.fc_serial_num2.focus();
-            return false;
-        }
-        if (document.myform.pmu.value == "") {
-            alert("PMU를 입력해주세요.");
-            document.myform.pmu.focus();
-            return false;
-        }
         return true;
     }
 
@@ -428,6 +419,13 @@ try {
 
     function openContentAs(asHistoryNum) {
         window.open("content_as.php?asHistoryNum="+asHistoryNum, "write_as", "width=800, height=600, left=100, top=50");
+    }
+
+    function delCheck(num) {
+        event.preventDefault();
+        if (confirm("정말 삭제하시겠습니까?")) {
+            location.href = "del_ok.php?num=" + num;
+        }
     }
     </script>
 </body>

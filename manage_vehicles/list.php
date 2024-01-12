@@ -95,6 +95,21 @@ try {
                                     <option value="vehicle_serial_num" <?php if($column=='vehicle_serial_num') {?>selected<?php }?>>기체 일련번호</option>
                                     <option value="fc_serial_num1" <?php if($column=='fc_serial_num1') {?>selected<?php }?>>FC 일련번호</option>
                                     <option value="fc_serial_num2" <?php if($column=='fc_serial_num2') {?>selected<?php }?>>FC 시리얼</option>
+                                    <option value="PMU" <?php if($column=='pmu') {?>selected<?php }?>>PMU</option>
+                                    <option value="gps1" <?php if($column=='gps1') {?>selected<?php }?>>GPS(1)</option>
+                                    <option value="gps2" <?php if($column=='gps2') {?>selected<?php }?>>GPS(2)</option>
+                                    <option value="rtk_module" <?php if($column=='rtk_module') {?>selected<?php }?>>RTK 모듈</option>
+                                    <option value="rtk1" <?php if($column=='rtk1') {?>selected<?php }?>>RTK(1)</option>
+                                    <option value="rtk2" <?php if($column=='rtk2') {?>selected<?php }?>>RTK(2)</option>
+                                    <option value="transmitter" <?php if($column=='transmitter') {?>selected<?php }?>>송신기</option>
+                                    <option value="receiver" <?php if($column=='receiver') {?>selected<?php }?>>수신기</option>
+                                    <option value="camera" <?php if($column=='camera') {?>selected<?php }?>>카메라</option>
+                                    <option value="front_radar" <?php if($column=='front_radar') {?>selected<?php }?>>전방 레이더</option>
+                                    <option value="rear_radar" <?php if($column=='rear_radar') {?>selected<?php }?>>후방 레이더</option>
+                                    <option value="downward_radar" <?php if($column=='downward_radar') {?>selected<?php }?>>하방 레이더</option>
+                                    <option value="etc_motor" <?php if($column=='etc_motor') {?>selected<?php }?>>비고(모터)</option>
+                                    <option value="customer_co" <?php if($column=='customer_co') {?>selected<?php }?>>판매처</option>
+                                    <option value="customer_owner" <?php if($column=='customer_owner') {?>selected<?php }?>>소유자</option>
                                 </select>
                                 <input class="form-control me-2" type="search" placeholder="검색어" name="searchString" value="<?=$searchString?>">
                                 <button class="btn btn-outline-success" type="submit">search</button>
@@ -165,7 +180,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $makeDate = $row['make_date'];
 ?>
                                     <tr style="cursor:pointer;"
-                                        onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>';">
+                                        onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">
                                         <td scope="row"><?=$num?></td>
                                         <td style="text-align:center;"><?=$modelName?></td>
                                         <td style="text-align:center;"><?=$registrationNum?></td>
@@ -199,7 +214,7 @@ $total_pages = ceil($total_records / $records_per_page);
 for ($i = 1; $i <= $total_pages; $i++) {
 ?>
                                     <li class="page-item">
-                                        <a class="page-link" href="list.php?page=<?=$i?>&column=<?=$column?>&searchString=<?=$searchString?>">
+                                        <a class="page-link" href="list.php?page=<?=$i?>&column=<?=$column?>&searchString=<?=$searchString?>$sel_model=<?=$selModel?>">
                                             <?= $i ?>
                                         </a>
                                     </li>

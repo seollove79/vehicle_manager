@@ -15,16 +15,16 @@
                                     href="/manage_vehicles/list.php">기체정보관리</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">관리자메뉴</a>
+                                <a class="nav-link" href="/admin/list_member.php">관리자메뉴</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-5 d-flex align-items-center justify-content-end"><a href="/member/login.php">
+            <div class="col-5 d-flex align-items-center justify-content-end">
 <?php
 if (isset($_SESSION["mem_name"])) {
-    echo $_SESSION["mem_name"] ."님&nbsp;&nbsp;<a href='/member/logout.php'>로그아웃</a>";
+    echo $_SESSION["mem_name"] ."님&nbsp;<a href='/member/myinfo.php'><i class='bi bi-person-circle'></i></a>&nbsp;&nbsp;<a href='/member/logout.php'>로그아웃</a>";
 } else {
     echo "<a href='/member/login.php'>로그인</a>";
 }
