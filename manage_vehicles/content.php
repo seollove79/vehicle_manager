@@ -3,6 +3,10 @@
 <?php include_once("../include/session.php"); ?>
 <?php
 $num = isset($_GET["num"]) ? $_GET["num"] : exit("<script>alert('잘못된 접근입니다.');history.back();</script>");
+$page  = $_GET["page"];
+$column  = $_GET["column"];
+$searchString  = $_GET["searchString"];
+$selModel = $_GET["sel_model"];
 
 try {
     $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.num=:num";
@@ -383,7 +387,7 @@ try {
                                 <div style="text-align:center;margin:20px 0 50px 0;">
                                     <input type="submit" class="btn btn-primary" value="수정사항 적용">
                                     <button class="btn btn-primary" style="margin-left:20px" onclick="delCheck(<?=$num?>)">삭제</button>
-                                    <button class="btn btn-primary" style="margin-left:20px" onclick="event.preventDefault();history.back()">취소</button>
+                                    <button class="btn btn-primary" style="margin-left:20px" onclick="event.preventDefault();document.location.href='list.php?page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">미적용&목록</button>
                                 </div>
                             </form>
                         </div>

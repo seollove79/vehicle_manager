@@ -143,7 +143,7 @@ while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         </tr>
                     </table>
                     <div style="text-align:center;margin:20px 0 50px 0;">
-                        <input type="submit" class="btn btn-primary" value="수정사항 적용"><button class="btn btn-primary" style="margin-left:20px" onclick="delCheck(<?=$asHistoryNum?>)">삭제</button><button class="btn btn-primary" style="margin-left:20px" onclick="self.close()">취소</button>
+                        <input type="submit" class="btn btn-primary" value="수정사항 적용"><?php if ($mem_level==100 || $mem_level==999) {?><button class="btn btn-primary" style="margin-left:20px" onclick="delCheck(<?=$asHistoryNum?>)">삭제</button><?php }?><button class="btn btn-primary" style="margin-left:20px" onclick="self.close()">취소</button>
                     </div>
                 </form>
             </div>

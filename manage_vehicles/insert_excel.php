@@ -99,22 +99,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excelFile'])) {
             $makeDate = trim($columns[4]);
 
             if ($modelNum=="") {
-                echo "<script>alert('모델명이 입력되지 않았습니다. ({$rowIndex}번째 데이터)');history.back();</script>";
+                echo "<script>alert('모델명이 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
                 exit();
             }
 
             if ($registrationNum=="") {
-                echo "<script>alert('등록번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');history.back();</script>";
+                echo "<script>alert('등록번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
                 exit();
             }
 
             if ($vehicleSerialNum=="") {
-                echo "<script>alert('기체일련번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');history.back();</script>";
+                echo "<script>alert('기체일련번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
                 exit();
             }
 
             if ($makeDate=="") {
-                echo "<script>alert('제작일자가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');history.back();</script>";
+                echo "<script>alert('제작일자가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
                 exit();
             }
             
@@ -164,5 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excelFile'])) {
         
     }
     echo "<script>alert('데이터가 성공적으로 입력되었습니다.');self.close();opener.location.reload();</script>";
+    exit;
 }
 ?>

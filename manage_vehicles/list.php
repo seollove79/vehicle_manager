@@ -3,7 +3,7 @@
 <?php include_once("../include/session.php"); ?>
 <?php
 // 페이징 설정
-$records_per_page = 30; // 페이지당 레코드 수
+$records_per_page = 50; // 페이지당 레코드 수
 $page = "";
 
 if (isset($_GET["page"])) {
@@ -26,6 +26,7 @@ if (isset($_GET["searchString"])) {
 
 if (isset($_GET["sel_model"])) {
     $selModel = $_GET["sel_model"];
+    echo $selModel;
 } else{
     $selModel = "";
 };
@@ -41,7 +42,7 @@ try {
 
     $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.del_check=0 ";
     if ($selModel != "") {
-        $sqlStr = $sqlStr . " and A.models_num = $selModel ";
+        $sqlStr = $sqlStr . " and A.models_num = .$selModel";
     }
     if ($searchString != "") {
         $sqlStr = $sqlStr . " and A.$column like '%$searchString%' ";
@@ -52,7 +53,6 @@ try {
     $stmt->bindParam(':start_from', $start_from, PDO::PARAM_INT);
     $stmt->bindParam(':records_per_page', $records_per_page, PDO::PARAM_INT);
     $stmt->execute();
-    $total_records = $stmt->rowCount();
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
@@ -86,6 +86,7 @@ try {
                     <div class="row mt-3 mb-3">
                         <div class="col-6 text-start"><button class="btn btn-primary" onclick="document.location.href='download_excel.php?column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">엑셀 다운로드</button>
                         <button class="btn btn-primary" onclick="openWriteExcel()" style="margin-left:10px;">엑셀 업로드</button>
+                        <button class="btn btn-primary" onclick="delSel()" style="margin-left:10px;">선택삭제</button>
                     </div>
                         <div class="col-6 text-end">
                             <form class="d-flex" action="list.php" method="get" onsubmit="return checkSearchForm()" name="searchForm">
@@ -119,11 +120,34 @@ try {
                         </div>
                     </div>
 <!--검색폼-->
+<?php
+// 전체 페이지 수 계산
+$sqlCountStr = "SELECT COUNT(*) FROM vehicles where del_check=0 ";
+if ($selModel != "") {
+    $sqlCountStr = $sqlCountStr . " and models_num = " .$selModel;
+}
+if ($searchString != "") {
+    $sqlCountStr = $sqlCountStr . " and $column like '%$searchString%' ";
+}
+$stmtRecord = $conn->prepare($sqlCountStr);
+$stmtRecord->execute();
+$totalRecords = $stmtRecord->fetchColumn();
+
+$totalPages = ceil($totalRecords / $records_per_page);
+?>
+                    <div class="row">
+                        <div class="col-12 text-end">
+                            <span class="badge bg-primary">전체 <?=$totalRecords?>건</span>
+                            <span class="badge bg-primary">현재 <?=$page?>페이지</span>
+                            <span class="badge bg-primary">전체 <?=$totalPages?>페이지</span>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12">
                             <table class="table table-hover table-borderd">
                                 <thead>
                                     <tr>
+                                        <th scope="sel_num"><input type="checkbox" name="sel_all" onclick="selAll()"></th>
                                         <th scope="col">순번</th>
                                         <th scope="col">
                                         <form name="modelForm" method="get" action="list.php" onsubmit="return checkModelForm()">
@@ -181,16 +205,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $downwardRadar = $row['downward_radar'];
     $makeDate = $row['make_date'];
 ?>
-                                    <tr style="cursor:pointer;"
-                                        onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';">
-                                        <td scope="row"><?=$num?></td>
-                                        <td style="text-align:center;"><?=$modelName?></td>
-                                        <td style="text-align:center;"><?=$registrationNum?></td>
-                                        <td style="text-align:center;"><?=$vehicleSerialNum?></td>
-                                        <td style="text-align:center;"><?=$makeDate?></td>
-                                        <td style="text-align:center;"><?=$fcSerialNum1?></td>
-                                        <td style="text-align:center;"><?=$transmitter?></td>
-                                        <td style="text-align:center;"><?=$receiver?></td>
+                                    <tr style="cursor:pointer;">
+                                        <td scope="sel_num"><input type="checkbox" name="sel_num"></td>
+                                        <td scope="row" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$num?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$modelName?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$registrationNum?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$vehicleSerialNum?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$makeDate?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$fcSerialNum1?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$transmitter?></td>
+                                        <td style="text-align:center;" onclick="document.location.href='content.php?num=<?=$num?>&page=<?=$page?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>';"><?=$receiver?></td>
                                     </tr>
                                     <?php
 }
@@ -204,29 +228,37 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination">
                                     <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Previous">
+<?php
+$pageSplit = 20;
+if ($page % $pageSplit == 0) {
+    $startPage = $page - $pageSplit + 1;
+} else {
+    $startPage = $page - ($page % $pageSplit) + 1;
+}
+?>
+                                        <a class="page-link" <?php if($page>$pageSplit) {?>href="list.php?page=<?=$startPage-$pageSplit?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>"<?php }?> aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
-                                    <?php
-// 전체 페이지 수 계산
-$total_pages = ceil($total_records / $records_per_page);
-
+<?php
 // 페이징 링크 생성
-for ($i = 1; $i <= $total_pages; $i++) {
+for ($i = $startPage; $i <= $startPage+($pageSplit-1); $i++) {
+    if ($i > $totalPages) {
+        break;
+    }
 ?>
                                     <li class="page-item">
-                                        <a class="page-link" href="list.php?page=<?=$i?>&column=<?=$column?>&searchString=<?=$searchString?>$sel_model=<?=$selModel?>">
+                                        <a class="page-link" <?php if($page==$i) {?> style="background-color:silver" <?php } ?> href="list.php?page=<?=$i?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>">
                                             <?= $i ?>
                                         </a>
                                     </li>
-                                    <?php
+<?php
 }
 // 연결 종료
 $conn = null;
 ?>
                                     <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
+                                        <a class="page-link" <?php if ($startPage+($pageSplit-1) < $totalPages) {?> href="list.php?page=<?=$startPage+$pageSplit?>&column=<?=$column?>&searchString=<?=$searchString?>&sel_model=<?=$selModel?>"<?php } ?> aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
@@ -246,6 +278,12 @@ $conn = null;
     </script>
     <script>
     function checkSearchForm() {
+        if (document.searchForm.column.value == "") {
+            alert("검색항목을 선택하세요.");
+            document.searchForm.column.focus();
+            return false;
+        }
+
         if (document.searchForm.searchString.value == "") {
             alert("검색어를 입력하세요.");
             document.searchForm.searchString.focus();
@@ -266,6 +304,44 @@ $conn = null;
     function openWriteExcel() {
         event.preventDefault();
         window.open("write_excel.php", "write_excel", "width=800, height=250, left=100, top=50");
+    }
+
+    function selAll() {
+        var chk = document.getElementsByName("sel_num");
+        var chkAll = document.getElementsByName("sel_all");
+
+        if (chkAll[0].checked == true) {
+            for (var i = 0; i < chk.length; i++) {
+                chk[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < chk.length; i++) {
+                chk[i].checked = false;
+            }
+        }
+    }
+
+    function delSel() {
+        var chk = document.getElementsByName("sel_num");
+        var selNum = "";
+
+        for (var i = 0; i < chk.length; i++) {
+            if (chk[i].checked == true) {
+                if (selNum != "") {
+                    selNum = selNum + ",";
+                }
+                selNum = selNum + chk[i].parentNode.parentNode.childNodes[3].innerText;
+            }
+        }
+
+        if (selNum == "") {
+            alert("삭제할 기체를 선택하세요.");
+            return false;
+        }
+
+        if (confirm("선택한 기체를 삭제하시겠습니까?")) {
+            document.location.href = "delete_multiple.php?sel_num=" + selNum;
+        }
     }
     </script>
 </body>
