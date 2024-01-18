@@ -26,7 +26,6 @@ if (isset($_GET["searchString"])) {
 
 if (isset($_GET["sel_model"])) {
     $selModel = $_GET["sel_model"];
-    echo $selModel;
 } else{
     $selModel = "";
 };
@@ -42,12 +41,13 @@ try {
 
     $sqlStr = "SELECT A.*,B.model_name FROM vehicles A inner join models B on A.models_num = B.num where A.del_check=0 ";
     if ($selModel != "") {
-        $sqlStr = $sqlStr . " and A.models_num = .$selModel";
+        $sqlStr = $sqlStr . " and A.models_num = $selModel";
     }
     if ($searchString != "") {
         $sqlStr = $sqlStr . " and A.$column like '%$searchString%' ";
     }
     $sqlStr = $sqlStr . " ORDER BY A.num DESC LIMIT :start_from, :records_per_page";
+
 
     $stmt = $conn->prepare($sqlStr);
     $stmt->bindParam(':start_from', $start_from, PDO::PARAM_INT);

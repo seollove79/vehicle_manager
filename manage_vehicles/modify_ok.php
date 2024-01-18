@@ -4,15 +4,27 @@ include_once("../include/dbcon.php");
 include_once("../include/session.php"); 
 
 // POST 데이터 처리
-$registrationNum = isset($_POST["registration_num"]) ? $_POST["registration_num"] : exit("<script>alert('신고번호를 입력해주세요.');history.back();</script>");
 $vehicleSerialNum = isset($_POST["vehicle_serial_num"]) ? $_POST["vehicle_serial_num"] : exit("<script>alert('기체 일련번호를 입력해주세요.');history.back();</script>");
-$makeDate = isset($_POST["make_date"]) ? $_POST["make_date"] : exit("<script>alert('제작일을 입력해주세요.');history.back();</script>");
-$fcSerialNum1 = isset($_POST["fc_serial_num1"]) ? $_POST["fc_serial_num1"] : exit("<script>alert('FC 시리얼을 입력해주세요.');history.back();</script>");
+$num = $_POST["num"];
 
+// 기체 일련번호 중복 검사
+$sqlStr = "SELECT * FROM vehicles WHERE vehicle_serial_num = :vehicle_serial_num AND num != :num";
+$stmt = $conn->prepare($sqlStr);
+$stmt->bindValue(':vehicle_serial_num', $vehicleSerialNum, PDO::PARAM_STR);
+$stmt->bindValue(':num', $num, PDO::PARAM_INT);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($row) {
+    echo "<script>alert('이미 등록된 기체일련번호입니다..');history.back();</script>";
+    exit;
+}
+
+$registrationNum = $_POST["registration_num"] ?: "N/A";
+$makeDate = $_POST["make_date"] ?: null;
+$fcSerialNum1 = $_POST["fc_serial_num1"] ?: "N/A";
 $fcSerialNum2 = $_POST["fc_serial_num2"] ?: "N/A";
 $pmu = $_POST["pmu"] ?: "N/A";
 
-$num = $_POST["num"];
 $customerDate = $_POST["customer_date"] ?: null;
 $certificationInitialDate = $_POST["certification_initial_date"] ?: null;
 $certification1Date = $_POST["certification_1_date"] ?: null;
@@ -165,6 +177,7 @@ foreach ($before as $key => $value) {
         $stmt->execute();
     }
 }
+
 
 // vehicles 테이블에 데이터 삽입
 $sqlStr = "update vehicles set 

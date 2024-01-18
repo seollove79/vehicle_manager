@@ -44,9 +44,9 @@
                                 <table class="write-table">
                                     <tr>
                                         <td width="25%" style="background-color:#e2e2e2">*모델명</td>
-                                        <td width="25%" style="background-color:#e2e2e2">*신고번호</td>
+                                        <td width="25%" style="background-color:#e2e2e2">신고번호</td>
                                         <td width="25%" style="background-color:#e2e2e2">*기체 일련번호</td>
-                                        <td width="25%" style="background-color:#e2e2e2">*제작일</td>
+                                        <td width="25%" style="background-color:#e2e2e2">제작일</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -73,7 +73,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 <div style="text-align:left;margin:20px 0 5px 0;">2. 장착 장비 정보</div>
                                 <table class="write-table">
                                     <tr>
-                                        <td width="25%" style="background-color:#e2e2e2">*FC 일련번호</td>
+                                        <td width="25%" style="background-color:#e2e2e2">FC 일련번호</td>
                                         <td width="50%" colspan="2" style="background-color:#e2e2e2">FC 시리얼</td>
                                         <td width="25%" style="background-color:#e2e2e2">비고(모터)</td>
                                     </tr>
@@ -195,26 +195,26 @@ function checkForm() {
         document.myform.models_num.focus();
         return false;
     }
-    if (document.myform.registration_num.value == "") {
-        alert("신고번호를 입력해주세요.");
-        document.myform.registration_num.focus();
-        return false;
-    }
+    // if (document.myform.registration_num.value == "") {
+    //     alert("신고번호를 입력해주세요.");
+    //     document.myform.registration_num.focus();
+    //     return false;
+    // }
     if (document.myform.vehicle_serial_num.value == "") {
         alert("기체 일련번호를 입력해주세요.");
         document.myform.vehicle_serial_num.focus();
         return false;
     }
-    if (document.myform.make_date.value == "") {
-        alert("제작일을 입력해주세요.");
-        document.myform.make_date.focus();
-        return false;
-    }
-    if (document.myform.fc_serial_num1.value == "") {
-        alert("FC 일련번호를 입력해주세요.");
-        document.myform.fc_serial_num1.focus();
-        return false;
-    }
+    // if (document.myform.make_date.value == "") {
+    //     alert("제작일을 입력해주세요.");
+    //     document.myform.make_date.focus();
+    //     return false;
+    // }
+    // if (document.myform.fc_serial_num1.value == "") {
+    //     alert("FC 일련번호를 입력해주세요.");
+    //     document.myform.fc_serial_num1.focus();
+    //     return false;
+    // }
     return true;
 }
     </script>

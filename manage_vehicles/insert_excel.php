@@ -103,19 +103,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excelFile'])) {
                 exit();
             }
 
-            if ($registrationNum=="") {
-                echo "<script>alert('등록번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
-                exit();
-            }
+            // if ($registrationNum=="") {
+            //     echo "<script>alert('등록번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
+            //     exit();
+            // }
 
             if ($vehicleSerialNum=="") {
                 echo "<script>alert('기체일련번호가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
                 exit();
             }
 
-            if ($makeDate=="") {
-                echo "<script>alert('제작일자가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
-                exit();
+            // if ($makeDate=="") {
+            //     echo "<script>alert('제작일자가 입력되지 않았습니다. ({$rowIndex}번째 데이터)');self.close();opener.location.reload();</script>";
+            //     exit();
+            // }
+
+            // 기체 일련번호 중복 검사
+            $sqlStr1 = "SELECT * FROM vehicles WHERE vehicle_serial_num = :vehicle_serial_num";
+            $stmt1 = $conn->prepare($sqlStr1);
+            $stmt1->bindValue(':vehicle_serial_num', $vehicleSerialNum, PDO::PARAM_STR);
+            $stmt1->execute();
+            $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+            if ($row1) {
+                echo "<script>alert('이미 등록된 기체일련번호입니다..');history.back();</script>";
+                exit;
             }
             
             //문자열 모델명을 models_num으로 변환
